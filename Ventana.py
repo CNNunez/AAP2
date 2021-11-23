@@ -11,7 +11,7 @@ from tkinter import *
 #uploads laberinto
 def load_img():
     # Get laberintos de prueba
-    l = laberintos("IMGs",nombre)
+    l = laberintos("IMGs",2)
     for i in range(10):
         l.evolve()
 

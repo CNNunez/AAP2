@@ -1,6 +1,7 @@
 #libs
 import cv2
 import numpy as np
+import os
 from population import *
 #from PIL import Image
 
@@ -37,7 +38,7 @@ class laberintos:
         scale = 5 # times of original size
         dim = (int(img.shape[1] * scale), int(img.shape[0] * scale))
         resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-        path = 'C:/Users/Carolina/Documents/TEC/2021/AA/Proyecto 2/AAP2/Results/Imagen' + str(position) + '.png'
+        path = os.path.dirname(os.path.realpath(__file__))+'\\Results\\Imagen' + str(position) + '.png'
         cv2.imwrite(path, resized)
         self.record_population[position].print()
 
