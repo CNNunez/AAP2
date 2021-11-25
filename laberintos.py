@@ -20,8 +20,8 @@ class laberintos:
         new_population = population(50) # Get first generation
         self.record_laberintos.append(new_img)
         self.record_population.append(new_population)
-        
-
+        self.chec_white(self.record_population[0])
+    
     #Methods
             #return length
     def length(self):
@@ -38,20 +38,19 @@ class laberintos:
         scale = 5 # times of original size
         dim = (int(img.shape[1] * scale), int(img.shape[0] * scale))
         resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-        path = os.path.dirname(os.path.realpath(__file__))+'\\Results\\Imagen' + str(position) + '.png'
+        path = os.path.dirname(os.path.realpath(__file__))+'\\Results\\Imagen' + str(100+position) + '.png'
         cv2.imwrite(path, resized)
         self.record_population[position].print()
 
             #paint population track
     def paint(self, population):
-        yellow = (0,0,255)
         img = copy.deepcopy(self.record_laberintos[0])
         for individual in population.all_population:
             #get data
             x = individual.coord_x
             y = individual.coord_y
             #change pixel color
-            img[x,y] = (0,0,255)
+            img[x,y] = individual.color
         return img
 
 
@@ -60,6 +59,22 @@ class laberintos:
         evo_population = copy.deepcopy(self.record_population[ len(self.record_population)-1 ])
         evo_population.cross()
         self.add_record(evo_population)
+
+    #Revisa que el punto este en un camino
+    def chec_white(self, population):
+        img = copy.deepcopy(self.record_laberintos[0])
+        for individual in population.all_population:
+            #get data
+            x = individual.coord_x
+            y = individual.coord_y
+            #change pixel color
+            b,g,r = (img[x, y])
+            if (b == 255 and g == 255 and r == 255):
+                individual.set_score(50)
+            if (b == 0 and g == 255 and r == 0):
+                individual.set_score(0)
+
+
         
 
 
