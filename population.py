@@ -46,52 +46,59 @@ class population:
             pos_1 = randint(0,len(self.all_population)-1)
 
             #get individuals
-            ind_1 = self.all_population[pos_1]
-            ind_2 = copy.deepcopy(indi)
+            ind_1 = copy.deepcopy(self.all_population[pos_1])
 
-            #Cruzar cromosomas
-            new_1 = individual(ind_1.coord_x,ind_2.coord_y)
-            new_2 = individual(ind_2.coord_x,ind_1.coord_y)
+            # si la adaptabilidad del individuo es menor al aleatorio
+            if indi.adap_score>ind_1.adap_score:
 
-            #validar que puntos no existan
-            exists = False
-            for i in self.all_population:
-                if ( (i.coord_x==new_1.coord_x) and (i.coord_y==new_1.coord_y) ):
+                #Evaluar cual cromosoma mutar
+                x_y = randint(0,1)
 
-                    for j in self.all_population:
-                        if ( (j.coord_x==new_2.coord_x) and (j.coord_y==new_2.coord_y) ):
-                            exists = True
+                if x_y==0:#Cruzar cromosoma x
+                    ind_1.coord_x = indi.coord_x
 
-            #determinar si el punto se añade
-            if not exists and individual.adap_score==0:
-                self.all_population[pos_1] = new_1
-                indi = new_2
-        
+                else:#Cruzar cromosomas y
+                    ind_1.coord_y = indi.coord_y
+
+
+                #validar que puntos no existan
+                exists = False
+                for i in self.all_population:
+                    if ( (i.coord_x==ind_1.coord_x) and (i.coord_y==ind_1.coord_y) ):
+                        exists = True
+
+                #determinar si el punto se añade
+                if not exists:
+                    self.all_population[pos_1] = copy.deepcopy(ind_1)
 
         #Mutar un cromosoma
     def mutate(self):
-        #get random mutation data
-        mut_pos = randint(0,len(self.all_population)-1)
-        mut_ind = copy.deepcopy(self.all_population[mut_pos])      #deberia heredar adap y color????
-        mut_gen = randint(0,49)
-        x_y = randint(0,1)
+        for individuo in self.all_population:
+            mut_ind = copy.deepcopy(individuo)
+            #Determinar si se muta
+            proba_aleatoria = randint(0,101)
+            if proba_aleatoria <= mut_ind.probabilidad:
+                
+                #Determinar valor de mutacion
+                mut_gen = randint(0,49)
+                x_y = randint(0,1)
 
-        #Evaluar cual cromosoma mutar
-        if x_y==0:#mutar x
-            mut_ind.coord_x = mut_gen
+                #Evaluar cual cromosoma mutar
+                if x_y==0:#mutar x
+                    mut_ind.coord_x = mut_gen
 
-        else:#mutar y
-            mut_ind.coord_y = mut_gen
+                else:#mutar y
+                    mut_ind.coord_y = mut_gen
 
-        #validar que punto no exista
-        exists = False
-        for i in self.all_population:
-            if ( (i.coord_x==mut_ind.coord_x) and (i.coord_y==mut_ind.coord_y) ):
-                exists = True
+                #validar que punto no exista
+                exists = False
+                for i in self.all_population:
+                    if ( (i.coord_x==mut_ind.coord_x) and (i.coord_y==mut_ind.coord_y) ):
+                        exists = True
 
-        #determinar si el punto se añade
-        if not exists:
-            self.all_population[mut_pos] = mut_ind
+                #determinar si el punto se añade
+                if not exists:
+                    individuo = mut_ind
 
 
     def checkNeighbor(self):
@@ -113,17 +120,14 @@ class population:
                 print("AUMENTO, POR VECINOS",indi.coord_x,indi.coord_y, "Puntaje", scoreVecino, "Cantida de vecinos", conta)               
                 indi.set_score(indi.adap_score + scoreVecino)
 
-        self.printt()
 
     def checkWalls(self,img):
-        print("hhhhhhhh")
         for ind in self.all_population:
             x = ind.coord_x
             y = ind.coord_y
             score = ind.adap_score
             pt = 0
             try:
-                print("     -----------")
                 x += 3 # 3 a la derecha
                 if img[x,y][0] == 0 and img[x,y][1] == 0 and img[x,y][2] == 0: #Revisar que sea pixel negro
                         pt += 1
@@ -155,39 +159,46 @@ class population:
                 ind.set_score(ind.adap_score + score)
 
 
-    #Cuando se llame a fitness tiene que ser con un allPopulation
-    def fitness(popu,laberinto):
-          puntaje = 0
-          for i in popu:
-                if i.getColor == 0:
-                     puntaje = checkNeighbor(i,popu)
-                     puntaje = checkWalls(i,puntaje,laberinto)
-                     i.set_score(puntaje)
-          return popu
+        # carcular la probabilidad de seleccion de un individuo
+    def selection(self):
+        for individio in self.all_population:
+            color = individio.color
+
+            #establecer probabilidades
+            if color[0]==0 and color[1]==0 and color[2]==0:         #color negro
+                individio.probabilidad = 0
+                
+            elif color[0]==255 and color[1]==255 and color[2]==255: #color blanco
+                individio.probabilidad = 20
+                
+            elif color[0]==0 and color[1]==255 and color[2]==0:     #color verde
+                individio.probabilidad = 5
+
+            elif color[0]==255 and color[1]==0 and color[2]==0:     #color azul
+                individio.probabilidad = 5
 
 
+        # Cuando se llame a fitness tiene que ser con un allPopulation
+    def fitness(self,img):
+            # Check Walls and Neighbors. This functions sets the idividua adap_score
+        self.checkWalls(img)
+        self.checkNeighbor()
 
-
-
-
-
-
-
-
-
+            # Determinar selection. Sets probabilidad de seleccion de individuos
+        self.selection()
 
 
 
             #print toda la lista de población
-    def printt(self):
+    def print(self):
         print(" ")
         print("           POBLACION")
-        print("------------------------------")
-        print("x      y      adap       color")
-        print("------------------------------")
+        print("---------------------------------------")
+        print("x      y      adap       prob     color")
+        print("---------------------------------------")
         for i in self.all_population:
-            print("%d     %d     %d     [%d,%d,%d]" % (i.coord_x,i.coord_y,i.adap_score,i.color[0],i.color[1],i.color[2]))
-        print("------------------------------")
+            print("%d     %d     %d         %d      [%d,%d,%d]" % (i.coord_x,i.coord_y,i.adap_score,i.probabilidad,i.color[0],i.color[1],i.color[2]))
+        print("---------------------------------------")
         print(" ")
 
 
