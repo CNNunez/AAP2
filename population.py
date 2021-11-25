@@ -105,3 +105,22 @@ class population:
             print("%d     %d     %d     [%d,%d,%d]" % (i.coord_x,i.coord_y,i.adap_score,i.color[0],i.color[1],i.color[2]))
         print("------------------------------")
         print(" ")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
