@@ -23,18 +23,18 @@ def load_img():
         l.print(i)
         input()
     """
+        #path = os.path.dirname(os.path.realpath(__file__))+'\\Results\\Imagen' + str(100+position) + '.png'
 
 def pruebaImg():
-
-    LabImg= (Image.open("\\IMGs\\1.png"))
+    LabImg= (PhotoImage(os.path.dirname(os.path.realpath(__file__))+'\\IMGs\\' + str(1) + '.png'))
     #imgLabP= (ImageTk.PhotoImage(file = "\\IMGs\\1.png"))
 
     #Resize the Image using resize method
-    resized_image= LabImg.resize((300,300), Image.ANTIALIAS)
-    new_image= ImageTk.PhotoImage(resized_image)
+#    resized_image= LabImg.resize((300,300), Image.ANTIALIAS)
+ #   new_image= ImageTk.PhotoImage(resized_image)
 
     #Add image to the Canvas Items
-    can_inicial.create_image(0,0, anchor=NW, image=new_image)
+    can_inicial.create_image(50, 10, image=LabImg, anchor=NW)
     can_inicial.new_image = new_image
 
     #canvasLabFinP.create_image(0,0, anchor=NW, image = imgLabP)
@@ -68,6 +68,7 @@ h = 400
 #Canvas laberinto inicial
 canvas.create_text(60, 20, fill="black", font="Verdana 15", text="Inicial")
 can_inicial = Canvas(gui, bg='#c4c4fc', width = w, height = h)
+can_inicial.pack(expand=YES, fill=BOTH)
 can_inicial.place(x = 20, y = 125)
 
 '''
