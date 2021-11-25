@@ -166,10 +166,10 @@ class population:
 
             #establecer probabilidades
             if color[0]==0 and color[1]==0 and color[2]==0:         #color negro
-                individio.probabilidad = 0
+                individio.probabilidad = 20
                 
             elif color[0]==255 and color[1]==255 and color[2]==255: #color blanco
-                individio.probabilidad = 20
+                individio.probabilidad = 0
                 
             elif color[0]==0 and color[1]==255 and color[2]==0:     #color verde
                 individio.probabilidad = 5
