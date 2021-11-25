@@ -4,8 +4,7 @@ class individual:
     coord_x = 0
     coord_y = 0
     adap_score = 0
-    color = [0,0,0]
-    probabilidad = 0
+    color = [0,0,255]
 
     #Init
     def __init__(self, x, y):
@@ -18,6 +17,3 @@ class individual:
 
     def set_color(self, color):
         self.color = color
-
-    def set_probabilidad(self, probabilidad):
-        self.probabilidad = probabilidad
