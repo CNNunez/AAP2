@@ -9,44 +9,16 @@ from PIL import Image, ImageTk
 
 # Funciones
 
-#uploads laberinto
-def load_img():
-    # Get laberintos de prueba
-    l = laberintos("IMGs",2)
-    """
-    for i in range(10):
-        l.evolve()
-
-
-    #print results
-    for i in range(l.length()):
-        l.print(i)
-        input()
-    """
-        #path = os.path.dirname(os.path.realpath(__file__))+'\\Results\\Imagen' + str(100+position) + '.png'
-
-def pruebaImg():
-    LabImg= (PhotoImage(os.path.dirname(os.path.realpath(__file__))+'\\IMGs\\' + str(1) + '.png'))
-    #imgLabP= (ImageTk.PhotoImage(file = "\\IMGs\\1.png"))
-
-    #Resize the Image using resize method
-#    resized_image= LabImg.resize((300,300), Image.ANTIALIAS)
- #   new_image= ImageTk.PhotoImage(resized_image)
-
-    #Add image to the Canvas Items
-    can_inicial.create_image(50, 10, image=LabImg, anchor=NW)
-    can_inicial.new_image = new_image
-
-    #canvasLabFinP.create_image(0,0, anchor=NW, image = imgLabP)
-    #canvasLabFinP.imgLabP = imgLabP
-
-
 
 #VENTANA
 gui = Tk()
 
+laberinto = 0
+cantNext = 1
+
 # geometria
-gui.geometry("1300x1000")
+gui.geometry("960x640")
+gui.config(background="#8C919A")
 gui.resizable(False,False)
 
 # aspecto
@@ -58,18 +30,17 @@ titulo = Label(text = "Proyecto de Laberintos", bg = "#17253f", fg = "white", fo
 titulo.pack(pady = 20)
 
 #Cuerpo
-canvas = Canvas(bg='#F2F1E7')
+canvas = Canvas(bg='#8C919A')
 canvas.pack(expand=YES, fill=BOTH)
 
 
-w = 400
-h = 400
+w = 300
+h = 300
 
 #Canvas laberinto inicial
 canvas.create_text(60, 20, fill="black", font="Verdana 15", text="Inicial")
 can_inicial = Canvas(gui, bg='#c4c4fc', width = w, height = h)
-can_inicial.pack(expand=YES, fill=BOTH)
-can_inicial.place(x = 20, y = 125)
+can_inicial.place(x = 10, y = 125)
 
 '''
 txt_inicial = Text(gui, height= 15,width= 50)
@@ -80,9 +51,9 @@ txt_inicial.place(x = 20, y = 550)
 
 
 #Canvas laberinto pasado
-canvas.create_text(500, 20, fill="black", font="Verdana 15", text="Anterior")
+canvas.create_text(400, 20, fill="black", font="Verdana 15", text="Anterior")
 can_anterior = Canvas(gui, bg='#678dce', width = w, height = h)
-can_anterior.place(x = 450, y = 125)
+can_anterior.place(x = 330, y = 125)
 
 '''
 txt_anterior = Text(gui, height= 15,width= 50)
@@ -93,9 +64,9 @@ txt_anterior.place(x = 450, y = 550)
 
 
 #Canvas laberinto actual
-canvas.create_text(930, 20, fill="black", font="Verdana 15", text="Actual")
+canvas.create_text(700, 20, fill="black", font="Verdana 15", text="Actual")
 can_actual = Canvas(gui, bg='#9bccfc', width = w, height = h)
-can_actual.place(x = 880, y = 125)
+can_actual.place(x = 650, y = 125)
 
 '''
 txt_actual = Text(gui, height= 15,width= 50)
@@ -110,17 +81,82 @@ txt_actual.place(x = 880, y = 550)
 #Footer
 nombre = IntVar()
 nombre_img = Entry(gui, textvariable = nombre, width = "12", font = ("Arial", "12"), bg= "white")
-nombre_img.place(x = 200, y = 25)
+nombre_img.place(x = 170, y = 450)
+nombre_lbl = Label (gui, text="Dificultad de Laberinto",font = ("Arial", "10"))
+nombre_lbl.place(x = 10, y = 450)
 
-btn_load = Button(gui, text="Load", command = pruebaImg(), width= "10", height= "2", bg= "#3B527E", font = "Arial 15", fg = "black")
-btn_load.place(x = 150, y = 850 )
+cant_gene = IntVar()
+cant_gene_img = Entry(gui, textvariable = cant_gene, width = "12", font = ("Arial", "12"), bg= "white")
+cant_gene_img.place(x = 170, y = 475)
+cant_gene_lbl = Label (gui, text="Cantidad de generaciones",font = ("Arial", "10"))
+cant_gene_lbl.place(x = 10, y = 475)
+
+cant_indivi = IntVar()
+cant_indivi_img  = Entry(gui, textvariable = cant_indivi, width = "12", font = ("Arial", "12"), bg= "white")
+cant_indivi_img.place(x = 170, y = 500)
+cant_indivie_lbl = Label (gui, text="Cantidad de individuos",font = ("Arial", "10"))
+cant_indivie_lbl.place(x = 10, y = 500)
+
+
+def loadLab():
+    LabImg= (Image.open("IMGs\\"+str(nombre.get())+".png"))
+
+    #Resize the Image using resize method
+    resized_image= LabImg.resize((w,h), Image.ANTIALIAS)
+    new_image= ImageTk.PhotoImage(resized_image)
+
+    #Add image to the Canvas Items
+    can_inicial.create_image(0,0, anchor=NW, image=new_image)
+    can_inicial.new_image = new_image
+
+    btn_next.place(x = 650, y = 550 )
+
+def exe_code():
+    # Get laberintos de prueba
+    lab = nombre.get()
+    cantGene = cant_gene.get()
+    cantIndi = cant_indivi.get()
+    laberinto = laberintos("IMGs",2)
+    """
+    for i in range(10):
+        l.evolve()
+
+
+    #print results
+    for i in range(l.length()):
+        l.print(i)
+        input()
+    """
+
+
+def nextImg():
+    global cantNext
+    LabImg= (Image.open("Results\\Imagen"+str(cantNext)+".png"))
+
+    #Resize the Image using resize method
+    resized_image= LabImg.resize((w,h), Image.ANTIALIAS)
+    new_image= ImageTk.PhotoImage(resized_image)
+
+    #Add image to the Canvas Items
+    can_actual.create_image(0,0, anchor=NW, image=new_image)
+    can_actual.new_image = new_image
+
+    if cantNext == cant_gene.get():
+        btn_next.place_forget()
+    else:
+        cantNext = cantNext + 1
+
+#BOTONES
+btn_load = Button(gui, text="Load", command = loadLab, width= "10", height= "2", bg= "#3B527E", font = "Arial 15", fg = "black")
+btn_load.place(x = 150, y = 550 )
 
 
 btn_exe = Button(gui, text="Execute", command = None, width= "10", height= "2", bg= "#3B527E", font = "Arial 15", fg = "black")
-btn_exe.place(x = 400, y = 850 )
+btn_exe.place(x = 400, y = 550 )
 
-btn_next = Button(gui, text="Next Img", command = load_img(), width= "10", height= "2", bg= "#3B527E", font = "Arial 15", fg = "black")
-btn_next.place(x = 650, y = 850 )
+btn_next = Button(gui, text="Next Img", command = nextImg, width= "10", height= "2", bg= "#3B527E", font = "Arial 15", fg = "black")
+btn_next.place(x = 650, y = 550 )
+
 
 
 
