@@ -10,6 +10,7 @@ from laberintos import *
 l = laberintos("IMGs",1)
 for i in range(10):
     l.evolve()
+    input()
 
 
 #print results
