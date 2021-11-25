@@ -15,10 +15,10 @@ class laberintos:
     
 
     #Init
-    def __init__(self, folder_name, cant):
+    def __init__(self, folder_name, cant,cantIndi):
         path = folder_name + "/" + str(cant) + ".png"
         new_img = cv2.imread(path)    # Read laberinto
-        new_population = population(50) # Get first generation
+        new_population = population(cantIndi) # Get first generation
 
         # save data
         self.record_laberintos.append(new_img)
@@ -50,8 +50,8 @@ class laberintos:
         scale = 5 # times of original size
         dim = (int(img.shape[1] * scale), int(img.shape[0] * scale))
         resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-        path = 'C:/Users/Carolina/Documents/TEC/2021/AA/Proyecto 2/AAP2/Results/Imag' + str(position) + '.png'
-        #path = os.path.dirname(os.path.realpath(__file__))+'\\Results\\Imagen' + str(position) + '.png'
+        #path = 'C:/Users/Carolina/Documents/TEC/2021/AA/Proyecto 2/AAP2/Results/Imag' + str(position) + '.png'
+        path = os.path.dirname(os.path.realpath(__file__))+'\\Results\\Imagen' + str(position) + '.png'
         cv2.imwrite(path, resized)
         self.record_population[position+1].print()
 
