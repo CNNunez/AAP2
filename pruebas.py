@@ -46,6 +46,7 @@ l.print(0)
 l.evolve()
 for i in l.record_population[0].all_population:
     checkWalls(i,l.record_laberintos[0])
+    checkNeighbor(i,l.record_population[0].all_population)
 l.print(1)
 
 

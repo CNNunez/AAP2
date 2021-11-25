@@ -48,7 +48,7 @@ class laberintos:
         dim = (int(img.shape[1] * scale), int(img.shape[0] * scale))
         resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
         #path = 'C:/Users/Carolina/Documents/TEC/2021/AA/Proyecto 2/AAP2/Results/Imag' + str(position) + '.png'
-        path = os.path.dirname(os.path.realpath(__file__))+'\\Results\\Imagen' + str(position) + '.png'
+        path = os.path.dirname(os.path.realpath(__file__))+'\\Results\\Imagen' + str(100+position) + '.png'
         cv2.imwrite(path, resized)
         self.record_population[position].print()
 
@@ -57,12 +57,13 @@ class laberintos:
     def paint(self, population):
         img = copy.deepcopy(self.record_laberintos[0])
         img[0,0] = (255,255,255)
+        img[25,25] = (255,0,255)
         for individual in population.all_population:
             #get data
             x = individual.coord_x
             y = individual.coord_y
             #change pixel color
-            img[x,y] = individual.color
+            img[x,y] = (0,0,255)
         return img
 
 
