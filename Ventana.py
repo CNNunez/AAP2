@@ -109,25 +109,19 @@ def loadLab():
     can_inicial.create_image(0,0, anchor=NW, image=new_image)
     can_inicial.new_image = new_image
 
-    btn_next.place(x = 650, y = 550 )
+    btn_next.place_forget()
 
 def exe_code():
     # Get laberintos de prueba
     lab = nombre.get()
     cantGene = cant_gene.get()
     cantIndi = cant_indivi.get()
-    laberinto = laberintos("IMGs",2)
-    """
-    for i in range(10):
-        l.evolve()
+    laberinto = laberintos("IMGs",lab,cantIndi)
+    
+    for i in range(cantGene):
+        laberinto.evolve(i+1)
 
-
-    #print results
-    for i in range(l.length()):
-        l.print(i)
-        input()
-    """
-
+    btn_next.place(x = 650, y = 550 )
 
 def nextImg():
     global cantNext
@@ -141,6 +135,17 @@ def nextImg():
     can_actual.create_image(0,0, anchor=NW, image=new_image)
     can_actual.new_image = new_image
 
+    if cantNext >= 1:
+        LabImg2= (Image.open("Results\\Imagen"+str(cantNext-1)+".png"))
+
+        #Resize the Image using resize method
+        resized_image= LabImg2.resize((w,h), Image.ANTIALIAS)
+        new_image= ImageTk.PhotoImage(resized_image)
+
+        #Add image to the Canvas Items
+        can_anterior.create_image(0,0, anchor=NW, image=new_image)
+        can_anterior.new_image = new_image
+
     if cantNext == cant_gene.get():
         btn_next.place_forget()
     else:
@@ -151,7 +156,7 @@ btn_load = Button(gui, text="Load", command = loadLab, width= "10", height= "2",
 btn_load.place(x = 150, y = 550 )
 
 
-btn_exe = Button(gui, text="Execute", command = None, width= "10", height= "2", bg= "#3B527E", font = "Arial 15", fg = "black")
+btn_exe = Button(gui, text="Execute", command = exe_code, width= "10", height= "2", bg= "#3B527E", font = "Arial 15", fg = "black")
 btn_exe.place(x = 400, y = 550 )
 
 btn_next = Button(gui, text="Next Img", command = nextImg, width= "10", height= "2", bg= "#3B527E", font = "Arial 15", fg = "black")
@@ -163,39 +168,3 @@ btn_next.place(x = 650, y = 550 )
 
 #Llamada al GUI
 gui.mainloop()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
